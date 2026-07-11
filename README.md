@@ -18,9 +18,7 @@ Aplicar los conceptos fundamentales de estructuras de datos mediante el desarrol
 ```text
 Estructura/
 │
-├── Tarea_01/
-├── Tarea_02/
-├── Tarea_03/
+├── Tareas/
 ├── Practicas/
 ├── Proyectos/
 └── README.md
