@@ -1,10 +1,12 @@
 class vehiculos:
+    #Constructor de la clase vehiculos
     def __init__(self, marca, modelo, anio, velocidadInicial):
         self.__marca = marca
         self.__modelo = modelo
         self.__anio = anio
         self.__velocidadInicial = velocidadInicial
 
+    #Metodo acelerar que aumenta la velocidad del vehiculo
     def acelerar(self, incremento):
         if incremento > 0:
             self.__velocidadInicial += incremento
@@ -12,6 +14,7 @@ class vehiculos:
         else:
             print("El incremento debe ser positivo.")
     
+    #Metodo frenar que disminuye la velocidad del vehiculo
     def frenar(self, decremento):
         if decremento > 0:
             if decremento <= self.__velocidadInicial:
@@ -22,6 +25,7 @@ class vehiculos:
         else:
             print("El decremento debe ser positivo.")
     
+    #Metodo para mostrar los datos del vehiculo
     def mostrar_datos(self):
         print("\n===== DATOS DEL VEHÍCULO =====")
         print(f"Marca: {self.__marca}")
@@ -30,6 +34,7 @@ class vehiculos:
         print(f"Velocidad actual: {self.__velocidadInicial} km/h")
         print("==============================")
 
+#Clase hija automovil que hereda de la clase vehiculos
 class automovil(vehiculos):
     def __init__(self, marca, modelo, anio, velocidadInicial, numeroPuertas):
         super().__init__(marca, modelo, anio, velocidadInicial)
@@ -41,6 +46,7 @@ class automovil(vehiculos):
     def describir(self):
         print(f"Soy un automovil y tengo {self.__numeroPuertas} puertas.")
 
+#Clase hija motocicleta que hereda de la clase vehiculos
 class motocicleta(vehiculos):
     def __init__(self, marca, modelo, anio, velocidadInicial, cilindraje):
         super().__init__(marca, modelo, anio, velocidadInicial)
@@ -52,6 +58,7 @@ class motocicleta(vehiculos):
     def describir(self):
         print(f"Soy una motocicleta y tengo un cilindraje de {self.__cilindraje} cc.")
 
+#Clase hija camion que hereda de la clase vehiculos
 class camion(vehiculos):
     def __init__(self, marca, modelo, anio, velocidadInicial, capacidadCarga):
         super().__init__(marca, modelo, anio, velocidadInicial)
