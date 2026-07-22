@@ -1,0 +1,65 @@
+class Nodo:
+
+    def __init__(self,dato):
+
+        self.dato=dato
+        self.siguiente=None
+        self.anterior=None
+
+
+class ListaDoble:
+
+    def __init__(self):
+        self.inicio=None
+
+
+    def insertar(self,dato):
+
+        nuevo=Nodo(dato)
+
+        if self.inicio is None:
+            self.inicio=nuevo
+            return
+
+        actual=self.inicio
+
+        while actual.siguiente:
+            actual=actual.siguiente
+
+        actual.siguiente=nuevo
+        nuevo.anterior=actual
+
+
+    def mostrar_adelante(self):
+
+        actual=self.inicio
+
+        while actual:
+            print(actual.dato,end=" <-> ")
+            ultimo=actual
+            actual=actual.siguiente
+
+        print("None")
+
+        return ultimo
+
+
+    def mostrar_atras(self):
+
+        ultimo=self.mostrar_adelante()
+
+        while ultimo:
+
+            print(ultimo.dato,end=" <-> ")
+
+            ultimo=ultimo.anterior
+
+        print("None")
+
+
+lista=ListaDoble()
+
+for x in [10,20,30,40]:
+    lista.insertar(x)
+
+lista.mostrar_atras()
