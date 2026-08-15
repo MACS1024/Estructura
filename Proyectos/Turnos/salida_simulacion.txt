@@ -1,0 +1,126 @@
+
+################################################################################################
+# REGISTRO DE CLIENTES (emisión de tickets)
+################################################################################################
+Turno #001 | Ana García         | Diamante   | Creado: 08/08/2026 01:22:20 | Espera máx.: 2.0s
+Turno #002 | Luis Pérez         | Oro        | Creado: 08/08/2026 01:22:20 | Espera máx.: 5.0s
+Turno #003 | María Torres       | Plata      | Creado: 08/08/2026 01:22:20 | Espera máx.: 12.63s
+Turno #004 | Carlos Ruiz        | No cliente | Creado: 08/08/2026 01:22:20 | Espera máx.: 44.56s
+Turno #005 | Sofía Hernández    | Oro        | Creado: 08/08/2026 01:22:20 | Espera máx.: 5.0s
+Turno #006 | Jorge Martínez     | Diamante   | Creado: 08/08/2026 01:22:20 | Espera máx.: 2.0s
+Turno #007 | Valeria López      | Plata      | Creado: 08/08/2026 01:22:20 | Espera máx.: 12.88s
+Turno #008 | Diego Ramírez      | No cliente | Creado: 08/08/2026 01:22:20 | Espera máx.: 31.95s
+Turno #009 | Camila Flores      | Oro        | Creado: 08/08/2026 01:22:20 | Espera máx.: 5.0s
+Turno #010 | Andrés Castillo    | Plata      | Creado: 08/08/2026 01:22:20 | Espera máx.: 14.89s
+Turno #011 | Fernanda Ortiz     | Diamante   | Creado: 08/08/2026 01:22:20 | Espera máx.: 2.0s
+Turno #012 | Ricardo Mendoza    | No cliente | Creado: 08/08/2026 01:22:20 | Espera máx.: 58.52s
+Turno #013 | Paola Jiménez      | Oro        | Creado: 08/08/2026 01:22:20 | Espera máx.: 5.0s
+Turno #014 | Sebastián Rojas    | Plata      | Creado: 08/08/2026 01:22:20 | Espera máx.: 10.25s
+Turno #015 | Daniela Vargas     | No cliente | Creado: 08/08/2026 01:22:20 | Espera máx.: 42.79s
+Turno #016 | Emilio Navarro     | Oro        | Creado: 08/08/2026 01:22:20 | Espera máx.: 5.0s
+Turno #017 | Renata Salas       | Diamante   | Creado: 08/08/2026 01:22:20 | Espera máx.: 2.0s
+Turno #018 | Iván Cordero       | Plata      | Creado: 08/08/2026 01:22:20 | Espera máx.: 14.79s
+
+Total de clientes ingresados: 18
+En espera Diamante: 4  |  En espera Oro/Plata/No cliente: 14
+
+################################################################################################
+# EJEMPLO DE TICKET GENERADO
+################################################################################################
+--------------------------------------
+           BANCO MERIDIANO            
+--------------------------------------
+ Turno:        #001
+ Cliente:      Ana García
+ Categoría:    Diamante
+ Fecha:        08/08/2026
+ Hora:         01:22:20
+ Espera máx.:  2.0 seg
+--------------------------------------
+
+################################################################################################
+# ATENCIÓN EN CAJAS (1 exclusiva Diamante + 4 generales)
+################################################################################################
+[Ejecutivo caja 1] Llamando turno #001 · Ana García (Diamante) · margen de espera: 2.0s
+[Ejecutivo caja 2] Llamando turno #002 · Luis Pérez (Oro) · margen de espera: 5.0s
+[Ejecutivo caja 3] Llamando turno #005 · Sofía Hernández (Oro) · margen de espera: 5.0s
+[Ejecutivo caja 4] Llamando turno #009 · Camila Flores (Oro) · margen de espera: 5.0s
+[Ejecutivo caja 5] Llamando turno #013 · Paola Jiménez (Oro) · margen de espera: 5.0s
+[Ejecutivo caja 4] Turno #009 NO se presentó dentro de 5.0s. Se avanza al siguiente turno.
+[Ejecutivo caja 4] Llamando turno #016 · Emilio Navarro (Oro) · margen de espera: 5.0s
+[Ejecutivo caja 5] Turno #013 NO se presentó dentro de 5.0s. Se avanza al siguiente turno.
+[Ejecutivo caja 5] Llamando turno #003 · María Torres (Plata) · margen de espera: 12.63s
+[Ejecutivo caja 1] Turno #001 atendido. Espera real: 0.0s (máx. 2.0s) · Duración atención: 6.18s
+[Ejecutivo caja 1] Llamando turno #006 · Jorge Martínez (Diamante) · margen de espera: 2.0s
+[Ejecutivo caja 2] Turno #002 atendido. Espera real: 0.0s (máx. 5.0s) · Duración atención: 5.32s
+[Ejecutivo caja 2] Llamando turno #007 · Valeria López (Plata) · margen de espera: 12.88s
+[Ejecutivo caja 1] Turno #006 atendido. Espera real: 6.25s (máx. 2.0s) · Duración atención: 4.26s
+[Ejecutivo caja 1] Llamando turno #011 · Fernanda Ortiz (Diamante) · margen de espera: 2.0s
+[Ejecutivo caja 3] Turno #005 atendido. Espera real: 0.0s (máx. 5.0s) · Duración atención: 6.91s
+[Ejecutivo caja 3] Llamando turno #010 · Andrés Castillo (Plata) · margen de espera: 14.89s
+[Ejecutivo caja 4] Turno #016 atendido. Espera real: 5.0s (máx. 5.0s) · Duración atención: 3.45s
+[Ejecutivo caja 4] Llamando turno #014 · Sebastián Rojas (Plata) · margen de espera: 10.25s
+[Ejecutivo caja 5] Turno #003 NO se presentó dentro de 12.63s. Se avanza al siguiente turno.
+[Ejecutivo caja 5] Llamando turno #018 · Iván Cordero (Plata) · margen de espera: 14.79s
+[Ejecutivo caja 2] Turno #007 atendido. Espera real: 8.03s (máx. 12.88s) · Duración atención: 6.97s
+[Ejecutivo caja 2] Llamando turno #004 · Carlos Ruiz (No cliente) · margen de espera: 44.56s
+[Ejecutivo caja 1] Turno #011 atendido. Espera real: 10.99s (máx. 2.0s) · Duración atención: 6.27s
+[Ejecutivo caja 1] Llamando turno #017 · Renata Salas (Diamante) · margen de espera: 2.0s
+[Ejecutivo caja 3] Turno #010 atendido. Espera real: 11.7s (máx. 14.89s) · Duración atención: 3.52s
+[Ejecutivo caja 3] Llamando turno #008 · Diego Ramírez (No cliente) · margen de espera: 31.95s
+[Ejecutivo caja 4] Turno #014 NO se presentó dentro de 10.25s. Se avanza al siguiente turno.
+[Ejecutivo caja 4] Llamando turno #012 · Ricardo Mendoza (No cliente) · margen de espera: 58.52s
+[Ejecutivo caja 1] Turno #017 atendido. Espera real: 18.35s (máx. 2.0s) · Duración atención: 4.44s
+[Ejecutivo caja 3] Turno #008 atendido. Espera real: 20.53s (máx. 31.95s) · Duración atención: 6.35s
+[Ejecutivo caja 3] Llamando turno #015 · Daniela Vargas (No cliente) · margen de espera: 42.79s
+[Ejecutivo caja 5] Turno #018 atendido. Espera real: 17.63s (máx. 14.79s) · Duración atención: 4.89s
+[Ejecutivo caja 3] Turno #015 atendido. Espera real: 31.49s (máx. 42.79s) · Duración atención: 5.51s
+[Ejecutivo caja 2] Turno #004 atendido. Espera real: 17.69s (máx. 44.56s) · Duración atención: 7.32s
+[Ejecutivo caja 4] Turno #012 atendido. Espera real: 23.67s (máx. 58.52s) · Duración atención: 5.22s
+
+################################################################################################
+# SIMULACIÓN FINALIZADA EN 75.72 SEGUNDOS
+################################################################################################
+
+================================================================================================
+                               ESTADÍSTICAS DEL SISTEMA DE TURNOS                               
+================================================================================================
+Total de clientes ingresados : 18
+Total atendidos con éxito    : 14
+Total no presentados         : 4
+
+------------------------------------------------------------------------------------------------
+Categoría     Ingresados   Atendidos   No present.   Espera prom.(s) Atención prom.(s)  Cumpl. SLA
+------------------------------------------------------------------------------------------------
+Diamante               4           4             0               8.9              5.29       25.0%
+Oro                    5           3             2              1.67              5.23      100.0%
+Plata                  5           3             2             12.45              5.13       66.7%
+No cliente             4           4             0             23.34               6.1      100.0%
+------------------------------------------------------------------------------------------------
+
+======================================================================================================================
+                                DETALLE DE CLIENTES ATENDIDOS (fecha, hora y tiempos)                                 
+======================================================================================================================
+Turno  Cliente           Tipo       Caja  Fecha       Hora creación  Hora llamado  Espera(s)  Atención(s)  SLA
+----------------------------------------------------------------------------------------------------------------------
+#001   Ana García        Diamante   1     08/08/2026  01:22:20       01:22:20      0.0        6.18         Cumplido
+#002   Luis Pérez        Oro        2     08/08/2026  01:22:20       01:22:20      0.0        5.32         Cumplido
+#004   Carlos Ruiz       No cliente 2     08/08/2026  01:22:20       01:22:38      17.69      7.32         Cumplido
+#005   Sofía Hernández   Oro        3     08/08/2026  01:22:20       01:22:20      0.0        6.91         Cumplido
+#006   Jorge Martínez    Diamante   1     08/08/2026  01:22:20       01:22:26      6.25       4.26         Excedido
+#007   Valeria López     Plata      2     08/08/2026  01:22:20       01:22:28      8.03       6.97         Cumplido
+#008   Diego Ramírez     No cliente 3     08/08/2026  01:22:20       01:22:40      20.53      6.35         Cumplido
+#010   Andrés Castillo   Plata      3     08/08/2026  01:22:20       01:22:32      11.7       3.52         Cumplido
+#011   Fernanda Ortiz    Diamante   1     08/08/2026  01:22:20       01:22:31      10.99      6.27         Excedido
+#012   Ricardo Mendoza   No cliente 4     08/08/2026  01:22:20       01:22:44      23.67      5.22         Cumplido
+#015   Daniela Vargas    No cliente 3     08/08/2026  01:22:20       01:22:51      31.49      5.51         Cumplido
+#016   Emilio Navarro    Oro        4     08/08/2026  01:22:20       01:22:25      5.0        3.45         Cumplido
+#017   Renata Salas      Diamante   1     08/08/2026  01:22:20       01:22:38      18.35      4.44         Excedido
+#018   Iván Cordero      Plata      5     08/08/2026  01:22:20       01:22:37      17.63      4.89         Excedido
+======================================================================================================================
+
+Clientes que NO se presentaron a tiempo:
+  #003 María Torres (Plata) - creado 08/08/2026 01:22:20, límite 12.63s
+  #009 Camila Flores (Oro) - creado 08/08/2026 01:22:20, límite 5.0s
+  #013 Paola Jiménez (Oro) - creado 08/08/2026 01:22:20, límite 5.0s
+  #014 Sebastián Rojas (Plata) - creado 08/08/2026 01:22:20, límite 10.25s

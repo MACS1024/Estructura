@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema de Turnos con Prioridad · Banco Meridiano</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16233D; --ink-soft:#3B4A66;
+    --paper:#F3EEE2; --paper-2:#EAE3D2; --card:#FFFDF8;
+    --brass:#B8863B; --brass-dark:#8C6425;
+    --diamante:#3E7CB1; --diamante-bg:#E3EEF6;
+    --oro:#B8863B; --oro-bg:#F5EAD4;
+    --plata:#6B7280; --plata-bg:#E9EAEC;
+    --nocliente:#8A5A44; --nocliente-bg:#EFE2DA;
+    --red:#A83A32; --red-bg:#F6E2DF;
+    --green:#2F6B4F; --green-bg:#E1EEE6;
+    --line:#D8D0BB; --line-strong:#C2B89C;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--paper);
+    background-image:radial-gradient(circle at 1px 1px, rgba(22,35,61,0.05) 1px, transparent 0);
+    background-size:22px 22px;color:var(--ink);font-family:'Inter',sans-serif;min-height:100vh;
+  }
+  .wrap{max-width:1280px;margin:0 auto;padding:32px 24px 64px;}
+
+  header{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:26px;flex-wrap:wrap;gap:12px;
+  }
+  .brand{display:flex;align-items:center;gap:14px;}
+  .brand-mark{
+    width:46px;height:46px;border:2px solid var(--ink);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;
+    background:var(--ink);color:var(--paper);
+  }
+  .brand h1{font-family:'Space Grotesk',sans-serif;font-size:22px;margin:0;font-weight:700;}
+  .brand p{margin:2px 0 0;font-size:13px;color:var(--ink-soft);}
+  #reloj{font-family:'IBM Plex Mono',monospace;font-size:15px;color:var(--ink-soft);text-align:right;}
+  #reloj span{display:block;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--brass-dark);margin-bottom:2px;}
+
+  .categorias{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:26px;}
+  @media(max-width:860px){.categorias{grid-template-columns:repeat(2,1fr);}}
+  .cat-card{border-radius:6px;padding:14px 16px;border:1px solid var(--line);background:var(--card);}
+  .cat-card .tag{
+    display:inline-block;font-size:11px;font-weight:600;letter-spacing:0.4px;
+    padding:3px 9px;border-radius:3px;margin-bottom:8px;
+  }
+  .cat-card .sla{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--ink-soft);}
+  .tag-diamante{background:var(--diamante-bg);color:#1F4E70;}
+  .tag-oro{background:var(--oro-bg);color:var(--brass-dark);}
+  .tag-plata{background:var(--plata-bg);color:#3F444B;}
+  .tag-nocliente{background:var(--nocliente-bg);color:#5E3A2A;}
+
+  .grid-principal{display:grid;grid-template-columns:1fr 1.6fr;gap:22px;}
+  @media(max-width:960px){.grid-principal{grid-template-columns:1fr;}}
+
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:22px 24px;}
+  .panel h2{
+    font-family:'Space Grotesk',sans-serif;font-size:15px;margin:0 0 16px;
+    text-transform:uppercase;letter-spacing:1.2px;color:var(--ink-soft);
+    display:flex;align-items:center;gap:8px;
+  }
+  .panel h2::before{content:"";width:8px;height:8px;background:var(--brass);border-radius:50%;display:inline-block;}
+
+  label{display:block;font-size:12px;color:var(--ink-soft);margin:14px 0 5px;}
+  label:first-of-type{margin-top:0;}
+  input[type=text], select{
+    width:100%;padding:10px 12px;border:1px solid var(--line-strong);border-radius:4px;
+    font-family:'Inter',sans-serif;font-size:14px;background:var(--paper);color:var(--ink);
+  }
+  input[type=text]:focus, select:focus{outline:2px solid var(--brass);outline-offset:1px;}
+
+  .btn-registrar{
+    margin-top:18px;width:100%;padding:12px;border:none;border-radius:4px;
+    background:var(--ink);color:var(--paper);font-family:'Space Grotesk',sans-serif;
+    font-weight:600;font-size:14px;cursor:pointer;
+  }
+  .btn-registrar:hover{background:#233553;}
+
+  .ticket-preview{
+    margin-top:20px;border:1px dashed var(--line-strong);border-radius:6px;
+    padding:14px 16px;background:var(--paper-2);font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px;color:var(--ink-soft);line-height:1.7;
+  }
+  .ticket-preview b{color:var(--ink);}
+
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px;}
+  @media(max-width:700px){.stats{grid-template-columns:repeat(2,1fr);}}
+  .stat{background:var(--paper-2);border-radius:6px;padding:14px 16px;}
+  .stat .num{font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;color:var(--ink);}
+  .stat .lbl{font-size:11px;text-transform:uppercase;letter-spacing:0.8px;color:var(--ink-soft);margin-top:2px;}
+
+  .cajas{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-bottom:24px;}
+  .caja{
+    border-radius:6px;padding:14px 16px;border:1px solid var(--line);background:var(--card);
+    display:flex;flex-direction:column;gap:6px;position:relative;overflow:hidden;
+  }
+  .caja.ocupada{border-color:var(--brass);}
+  .caja .caja-titulo{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;display:flex;justify-content:space-between;align-items:center;}
+  .caja .caja-estado{font-size:11px;padding:2px 8px;border-radius:3px;font-weight:600;letter-spacing:0.3px;}
+  .caja .libre{background:var(--green-bg);color:var(--green);}
+  .caja .ocupada-tag{background:var(--oro-bg);color:var(--brass-dark);}
+  .caja .cliente{font-size:13px;color:var(--ink-soft);min-height:18px;}
+  .caja .barra-track{height:5px;border-radius:3px;background:var(--paper-2);overflow:hidden;}
+  .caja .barra-fill{height:100%;background:var(--brass);width:0%;transition:width .2s linear;}
+  .caja .exclusiva{font-size:10px;color:var(--diamante);text-transform:uppercase;letter-spacing:0.6px;}
+
+  .cola-lista{display:flex;flex-direction:column;gap:9px;max-height:300px;overflow-y:auto;padding-right:4px;}
+  .cola-vacia{text-align:center;padding:24px 10px;color:var(--ink-soft);font-size:13px;border:1px dashed var(--line-strong);border-radius:6px;background:var(--paper-2);}
+  .stub{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:5px;padding:10px 12px;}
+  .stub-num{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:14px;border-radius:4px;padding:5px 9px;min-width:44px;text-align:center;color:#fff;}
+  .stub-info{flex:1;min-width:0;}
+  .stub-name{font-weight:600;font-size:13px;color:var(--ink);}
+  .stub-meta{font-size:11px;color:var(--ink-soft);}
+  .stub-cat{font-size:10px;font-weight:600;padding:2px 7px;border-radius:3px;white-space:nowrap;}
+
+  .num-diamante{background:var(--diamante);} .cat-diamante{background:var(--diamante-bg);color:#1F4E70;}
+  .num-oro{background:var(--oro);} .cat-oro{background:var(--oro-bg);color:var(--brass-dark);}
+  .num-plata{background:var(--plata);} .cat-plata{background:var(--plata-bg);color:#3F444B;}
+  .num-nocliente{background:var(--nocliente);} .cat-nocliente{background:var(--nocliente-bg);color:#5E3A2A;}
+
+  .historial{margin-top:22px;}
+  .hist-row{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;padding:8px 4px;border-bottom:1px solid var(--line);align-items:center;}
+  .hist-row:last-child{border-bottom:none;}
+  .hist-num{font-family:'IBM Plex Mono',monospace;font-weight:600;}
+  .hist-atendido{color:var(--green);}
+  .hist-ausente{color:var(--red);}
+  .hist-vacio{font-size:13px;color:var(--ink-soft);font-style:italic;}
+
+  footer{margin-top:30px;text-align:center;font-size:12px;color:var(--ink-soft);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <div class="brand-mark">BM</div>
+      <div>
+        <h1>Banco Meridiano</h1>
+        <p>Sistema de turnos con prioridad · 5 cajas · Sucursal Centro</p>
+      </div>
+    </div>
+    <div id="reloj"><span>Hora actual</span>--:--:--</div>
+  </header>
+
+  <div class="categorias">
+    <div class="cat-card"><span class="tag tag-diamante">Diamante</span><div class="sla">máx. 2 s de espera</div></div>
+    <div class="cat-card"><span class="tag tag-oro">Oro</span><div class="sla">máx. 5 s de espera</div></div>
+    <div class="cat-card"><span class="tag tag-plata">Plata</span><div class="sla">10 – 15 s de espera</div></div>
+    <div class="cat-card"><span class="tag tag-nocliente">No cliente</span><div class="sla">30 – 60 s de espera</div></div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="num" id="stat-ingresados">0</div><div class="lbl">Clientes ingresados</div></div>
+    <div class="stat"><div class="num" id="stat-atendidos">0</div><div class="lbl">Atendidos</div></div>
+    <div class="stat"><div class="num" id="stat-ausentes">0</div><div class="lbl">No se presentaron</div></div>
+    <div class="stat"><div class="num" id="stat-espera-prom">0.0s</div><div class="lbl">Espera promedio</div></div>
+  </div>
+
+  <h2 style="font-family:'Space Grotesk',sans-serif;font-size:15px;text-transform:uppercase;letter-spacing:1.2px;color:var(--ink-soft);margin:0 0 12px;">Cajas de atención</h2>
+  <div class="cajas" id="cajas-cont"></div>
+
+  <div class="grid-principal">
+
+    <div class="panel">
+      <h2>Registrar cliente</h2>
+      <form id="form-registro" onsubmit="return registrarCliente(event)">
+        <label for="nombre">Nombre del cliente</label>
+        <input type="text" id="nombre" placeholder="Ej. Manuel Contreras" required>
+
+        <label for="categoria">Categoría</label>
+        <select id="categoria">
+          <option value="diamante">Diamante (máx. 2s)</option>
+          <option value="oro">Oro (máx. 5s)</option>
+          <option value="plata">Plata (10-15s)</option>
+          <option value="nocliente">No cliente (30-60s)</option>
+        </select>
+
+        <button type="submit" class="btn-registrar">Emitir ticket</button>
+      </form>
+
+      <div class="ticket-preview" id="ultimo-ticket">Aún no se ha emitido ningún ticket.</div>
+
+      <div class="historial">
+        <h2 style="margin-top:22px;">Últimos movimientos</h2>
+        <div id="lista-historial"><p class="hist-vacio">Sin movimientos registrados.</p></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Cola Diamante (caja exclusiva)</h2>
+      <div class="cola-lista" id="lista-diamante"></div>
+
+      <h2 style="margin-top:22px;">Cola general — Oro / Plata / No cliente</h2>
+      <div class="cola-lista" id="lista-general"></div>
+    </div>
+
+  </div>
+
+  <footer>El ejecutivo de cada caja llama al cliente y espera su tiempo máximo de categoría; si no se presenta, avanza automáticamente al siguiente turno.</footer>
+</div>
+
+<script>
+  // ---------- Configuración de categorías ----------
+  const CATEGORIAS = {
+    diamante:  { nombre:'Diamante',   prioridad:1, esperaMin:2,  esperaMax:2,  claseNum:'num-diamante',  claseTag:'cat-diamante'  },
+    oro:       { nombre:'Oro',        prioridad:2, esperaMin:5,  esperaMax:5,  claseNum:'num-oro',       claseTag:'cat-oro'       },
+    plata:     { nombre:'Plata',      prioridad:3, esperaMin:10, esperaMax:15, claseNum:'num-plata',     claseTag:'cat-plata'     },
+    nocliente: { nombre:'No cliente', prioridad:4, esperaMin:30, esperaMax:60, claseNum:'num-nocliente', claseTag:'cat-nocliente' }
+  };
+  const PROBABILIDAD_PRESENCIA = 0.85;
+  const TIEMPO_ATENCION_MIN = 3, TIEMPO_ATENCION_MAX = 8;
+
+  // ---------- Estado ----------
+  let colaDiamante = [];
+  let colaGeneral = [];
+  let contadorTurno = 1;
+  let ingresados = 0, atendidos = 0, ausentes = 0;
+  let esperasRegistradas = [];
+  let historial = [];
+
+  const CAJAS = [
+    { id:1, tipo:'Diamante', libre:true, actual:null },
+    { id:2, tipo:'General',  libre:true, actual:null },
+    { id:3, tipo:'General',  libre:true, actual:null },
+    { id:4, tipo:'General',  libre:true, actual:null },
+    { id:5, tipo:'General',  libre:true, actual:null },
+  ];
+
+  function pad(n){ return n.toString().padStart(3,'0'); }
+  function fechaActual(){ return new Date().toLocaleDateString('es-MX'); }
+  function horaActual(){ return new Date().toLocaleTimeString('es-MX'); }
+  function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+  function rand(min,max){ return Math.random()*(max-min)+min; }
+
+  function actualizarReloj(){
+    document.getElementById('reloj').innerHTML = '<span>Hora actual</span>' + horaActual();
+  }
+  setInterval(actualizarReloj, 1000);
+  actualizarReloj();
+
+  // ---------- Render de cajas ----------
+  function renderCajas(){
+    const cont = document.getElementById('cajas-cont');
+    cont.innerHTML = CAJAS.map(c => `
+      <div class="caja ${c.libre ? '' : 'ocupada'}" id="caja-${c.id}">
+        <div class="caja-titulo">
+          <span>Caja ${c.id}</span>
+          <span class="caja-estado ${c.libre ? 'libre' : 'ocupada-tag'}">${c.libre ? 'Libre' : 'Ocupada'}</span>
+        </div>
+        ${c.tipo === 'Diamante' ? '<div class="exclusiva">Exclusiva Diamante</div>' : '<div class="exclusiva">Oro · Plata · No cliente</div>'}
+        <div class="cliente">${c.actual ? ('#' + pad(c.actual.turno) + ' — ' + c.actual.nombre) : 'Esperando siguiente turno...'}</div>
+        <div class="barra-track"><div class="barra-fill" id="barra-${c.id}"></div></div>
+      </div>
+    `).join('');
+  }
+
+  function renderColas(){
+    const dCont = document.getElementById('lista-diamante');
+    dCont.innerHTML = colaDiamante.length === 0
+      ? '<div class="cola-vacia">No hay clientes Diamante en espera.</div>'
+      : colaDiamante.map(renderStub).join('');
+
+    const gCont = document.getElementById('lista-general');
+    const ordenada = [...colaGeneral].sort((a,b) => CATEGORIAS[a.cat].prioridad - CATEGORIAS[b.cat].prioridad || a.orden - b.orden);
+    gCont.innerHTML = ordenada.length === 0
+      ? '<div class="cola-vacia">No hay clientes en la cola general.</div>'
+      : ordenada.map(renderStub).join('');
+  }
+
+  function renderStub(c){
+    const cat = CATEGORIAS[c.cat];
+    return `
+      <div class="stub">
+        <div class="stub-num ${cat.claseNum}">#${pad(c.turno)}</div>
+        <div class="stub-info">
+          <div class="stub-name">${c.nombre}</div>
+          <div class="stub-meta">Creado ${c.fecha} ${c.hora} · espera máx. ${c.esperaMax.toFixed(1)}s</div>
+        </div>
+        <span class="stub-cat ${cat.claseTag}">${cat.nombre}</span>
+      </div>
+    `;
+  }
+
+  function renderStats(){
+    document.getElementById('stat-ingresados').textContent = ingresados;
+    document.getElementById('stat-atendidos').textContent = atendidos;
+    document.getElementById('stat-ausentes').textContent = ausentes;
+    const prom = esperasRegistradas.length
+      ? (esperasRegistradas.reduce((a,b)=>a+b,0) / esperasRegistradas.length).toFixed(1)
+      : '0.0';
+    document.getElementById('stat-espera-prom').textContent = prom + 's';
+  }
+
+  function renderHistorial(){
+    const cont = document.getElementById('lista-historial');
+    if(historial.length === 0){ cont.innerHTML = '<p class="hist-vacio">Sin movimientos registrados.</p>'; return; }
+    cont.innerHTML = historial.slice(0,10).map(h => `
+      <div class="hist-row">
+        <span class="hist-num">#${pad(h.turno)}</span>
+        <span>${h.nombre}</span>
+        <span class="${h.tipo === 'Atendido' ? 'hist-atendido' : 'hist-ausente'}">${h.tipo}</span>
+        <span style="color:var(--ink-soft);">${h.hora}</span>
+      </div>
+    `).join('');
+  }
+
+  // ---------- Registro de clientes (crea el ticket) ----------
+  function registrarCliente(e){
+    e.preventDefault();
+    const nombreInput = document.getElementById('nombre');
+    const catSel = document.getElementById('categoria').value;
+    const nombre = nombreInput.value.trim();
+    if(!nombre) return false;
+
+    const cat = CATEGORIAS[catSel];
+    const esperaMax = cat.esperaMin === cat.esperaMax ? cat.esperaMin : rand(cat.esperaMin, cat.esperaMax);
+
+    const cliente = {
+      turno: contadorTurno++,
+      nombre, cat: catSel,
+      fecha: fechaActual(), hora: horaActual(),
+      creadoEn: Date.now(),
+      esperaMax, orden: ingresados
+    };
+    ingresados++;
+
+    if(catSel === 'diamante') colaDiamante.push(cliente);
+    else colaGeneral.push(cliente);
+
+    document.getElementById('ultimo-ticket').innerHTML =
+      `<b>BANCO MERIDIANO</b><br>Turno: <b>#${pad(cliente.turno)}</b><br>Cliente: ${cliente.nombre}<br>` +
+      `Categoría: ${cat.nombre}<br>Fecha: ${cliente.fecha}<br>Hora: ${cliente.hora}<br>` +
+      `Espera máx.: ${esperaMax.toFixed(1)}s`;
+
+    nombreInput.value = '';
+    nombreInput.focus();
+
+    renderColas(); renderStats();
+    return false;
+  }
+
+  // ---------- Ejecutivo virtual por caja ----------
+  async function ejecutivoCaja(caja){
+    while(true){
+      let ticket = null;
+      if(caja.tipo === 'Diamante'){
+        ticket = colaDiamante.shift();
+      } else {
+        colaGeneral.sort((a,b) => CATEGORIAS[a.cat].prioridad - CATEGORIAS[b.cat].prioridad || a.orden - b.orden);
+        ticket = colaGeneral.shift();
+      }
+
+      if(!ticket){ await sleep(400); continue; }
+
+      caja.libre = false; caja.actual = ticket;
+      renderCajas(); renderColas();
+
+      const esperaMax = ticket.esperaMax;
+      const presente = Math.random() < PROBABILIDAD_PRESENCIA;
+      const tiempoRespuesta = presente ? rand(0, esperaMax) : esperaMax;
+
+      await animarBarra(caja.id, tiempoRespuesta);
+
+      const esperaReal = (Date.now() - ticket.creadoEn) / 1000;
+
+      if(!presente){
+        ausentes++;
+        historial.unshift({ turno: ticket.turno, nombre: ticket.nombre, tipo:'No se presentó', hora: horaActual() });
+        renderStats(); renderHistorial();
+        caja.libre = true; caja.actual = null;
+        renderCajas();
+        continue;
+      }
+
+      // Atención
+      const tiempoAtencion = rand(TIEMPO_ATENCION_MIN, TIEMPO_ATENCION_MAX);
+      await animarBarra(caja.id, tiempoAtencion);
+
+      atendidos++;
+      esperasRegistradas.push(esperaReal);
+      historial.unshift({ turno: ticket.turno, nombre: ticket.nombre, tipo:'Atendido', hora: horaActual() });
+      renderStats(); renderHistorial();
+
+      caja.libre = true; caja.actual = null;
+      renderCajas();
+    }
+  }
+
+  function animarBarra(idCaja, segundos){
+    return new Promise(resolve => {
+      const barra = document.getElementById('barra-' + idCaja);
+      const inicio = performance.now();
+      const duracionMs = Math.max(segundos, 0.1) * 1000;
+      function paso(t){
+        const progreso = Math.min((t - inicio) / duracionMs, 1);
+        if(barra) barra.style.width = (progreso * 100) + '%';
+        if(progreso < 1) requestAnimationFrame(paso);
+        else { if(barra) barra.style.width = '0%'; resolve(); }
+      }
+      requestAnimationFrame(paso);
+    });
+  }
+
+  // ---------- Inicio ----------
+  renderCajas(); renderColas(); renderStats(); renderHistorial();
+  CAJAS.forEach(c => ejecutivoCaja(c));
+</script>
+</body>
+</html>
